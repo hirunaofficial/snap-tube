@@ -1,11 +1,11 @@
-document.getElementById('downloadBtn').addEventListener('click', function() {
-    const videoUrl = document.getElementById('videoUrl').value;
+document.getElementById('downloadBtn').addEventListener('click', function () {
+    const videoUrl = document.getElementById('videoUrl').value.trim();
     const videoId = extractVideoId(videoUrl);
     if (videoId) {
         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
         displayThumbnail(thumbnailUrl, videoId);
     } else {
-        alert('Invalid YouTube URL');
+        alert('Invalid YouTube URL. Please enter a valid URL.');
     }
 });
 
@@ -17,17 +17,18 @@ function extractVideoId(url) {
 
 function displayThumbnail(url, videoId) {
     const thumbnailDisplay = document.getElementById('thumbnailDisplay');
-    thumbnailDisplay.innerHTML = `<img src="${url}" alt="YouTube Thumbnail" id="thumbnailImage" style="cursor: pointer;">`;
+    thumbnailDisplay.innerHTML = `
+        <img src="${url}" alt="YouTube Thumbnail" id="thumbnailImage" style="cursor: pointer; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+        <p style="margin-top: 10px; color: #e0e0e0; font-size: 0.9em;">Click on the image to download the thumbnail.</p>
+    `;
 
-    // Add click event listener to the image
     const imgElement = document.getElementById('thumbnailImage');
-    imgElement.addEventListener('click', function() {
+    imgElement.addEventListener('click', function () {
         downloadImage(url, videoId);
     });
 }
 
 function downloadImage(url, videoId) {
-    // Use fetch API to download the image and trigger a download
     fetch(url)
         .then(response => {
             if (!response.ok) {
